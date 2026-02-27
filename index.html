@@ -1,21 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>NeoCare Pro</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Neonatología - Test de Apgar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="app-container">
+        <div class="card">
+            <h2>🩺 Evaluación de APGAR</h2>
+            <p class="subtitle">Herramienta Profesional para Neonatología</p>
+            <hr>
+            
+            <input type="text" id="nombreBebe" placeholder="Nombre del Recién Nacido" class="input-moderno">
+            
+            <div class="form-grid">
+                <label>Frecuencia Cardíaca:</label>
+                <select id="p1">
+                    <option value="0">Ausente (0)</option>
+                    <option value="1">< 100 lpm (1)</option>
+                    <option value="2">> 100 lpm (2)</option>
+                </select>
 
-<div class="box">
-    <h2>NeoCare Pro</h2>
+                <label>Esfuerzo Respiratorio:</label>
+                <select id="p2">
+                    <option value="0">Ausente (0)</option>
+                    <option value="1">Débil/Irregular (1)</option>
+                    <option value="2">Llanto fuerte (2)</option>
+                </select>
 
-    <form method="POST">
-        <input type="text" name="username" placeholder="Usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
-        <button type="submit">Ingresar</button>
-    </form>
-</div>
+                <label>Tono Muscular:</label>
+                <select id="p3">
+                    <option value="0">Flácido (0)</option>
+                    <option value="1">Cierta flexión (1)</option>
+                    <option value="2">Movimiento activo (2)</option>
+                </select>
 
+                <label>Irritabilidad:</label>
+                <select id="p4">
+                    <option value="0">Sin respuesta (0)</option>
+                    <option value="1">Muecas (1)</option>
+                    <option value="2">Llanto/Estornudo (2)</option>
+                </select>
+
+                <label>Color de Piel:</label>
+                <select id="p5">
+                    <option value="0">Azul/Pálido (0)</option>
+                    <option value="1">Cuerpo rosa/Extr. azules (1)</option>
+                    <option value="2">Totalmente rosado (2)</option>
+                </select>
+            </div>
+
+            <button onclick="enviarDatos()" class="btn-main">CALCULAR RESULTADO</button>
+
+            <div id="resultado-container" style="display:none; margin-top: 20px; padding: 15px; border-radius: 10px;">
+                <h3 id="res-puntaje" style="margin: 0;"></h3>
+                <h4 id="res-estado" style="margin: 5px 0;"></h4>
+                <p id="res-diagnostico" style="font-size: 0.9em; font-style: italic;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function enviarDatos() {
+            const data = {
+                nombre: document.getElementById('nombreBebe').value,
+                valores: {
+                    p1: document.getElementById('p1').value, p2: document.getElementById('p2').value,
+                    p3: document.getElementById('p3').value, p4: document.getElementById('p4').value,
+                    p5: document.getElementById('p5').value
+                }
+            };
+
+            fetch('/calcular', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                const box = document.getElementById('resultado-container');
+                box.style.display = 'block';
+                box.style.backgroundColor = res.color + "33"; // Color con transparencia
+                box.style.borderLeft = "5px solid " + res.color;
+
+                document.getElementById('res-puntaje').innerText = "Puntaje: " + res.puntaje + " / 10";
+                document.getElementById('res-puntaje').style.color = res.color;
+                document.getElementById('res-estado').innerText = "Estado: " + res.estado;
+                document.getElementById('res-diagnostico').innerText = "Diagnóstico: " + res.diagnostico;
+            });
+        }
+    </script>
 </body>
 </html>
