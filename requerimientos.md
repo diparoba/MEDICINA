@@ -9,16 +9,10 @@ La aplicación también guarda cada evaluación en una base de datos para manten
 
 ---
 
-## Stack de Tecnologías
-
-El sistema fue desarrollado utilizando:
-
-- Python
-- Flask
-- HTML
-- CSS
-- JavaScript
-- SQLite
+## 2. Nuevo Stack Tecnológico Sugerido
+* **Lenguaje:** Python 3.10+
+* **Interfaz (Frontend/Backend):** **NiceGUI** (Para un desarrollo rápido basado en componentes de Python).
+* **Base de Datos:** SQLite (Para persistencia de datos local).
 
 ---
 
